@@ -49,10 +49,6 @@ int main(int argc, const char * argv[]) {
             [randomEmployee addAsset:asset];
         }
         
-
-        
-        // [employees removeObjectAtIndex:5];
-        
         for (int i = 0; i < 10; i++)
         {
             // Get a random number

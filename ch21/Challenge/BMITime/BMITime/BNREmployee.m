@@ -33,16 +33,6 @@
     [_assets addObject:a];
 }
 
-//- (void)removeAsset:(BNRAsset *)a
-//{
-//    // Is assets nil?
-//    if (!_assets) {
-//
-//        // Remove asset
-//    [_assets removeAllObjects];
-//    }
-//}
-
 - (void)removeAsset:(BNREmployee *)a
 {
     // Test if _assets is nil or zero
