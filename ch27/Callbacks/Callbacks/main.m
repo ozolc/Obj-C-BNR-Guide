@@ -8,17 +8,24 @@
 
 #import <Foundation/Foundation.h>
 #import "BNRLogger.h"
+#import "BNRLogger.m"
 
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
         
         BNRLogger *logger = [[BNRLogger alloc] init];
         
-        NSURL *url = [NSURL URLWithString:@"http://www.gutenberg.org/cache/epub/205/pg205.txt"];
+        [[NSNotificationCenter defaultCenter]
+         addObserver:logger
+         selector:@selector(zoneChange:)
+         name:NSSystemTimeZoneDidChangeNotification
+         object:nil];
         
-        NSURLRequest *request = [NSURLRequest requestWithURL:url];
+//        NSURL *url = [NSURL URLWithString:@"http://www.gutenberg.org/cache/epub/205/pg205.txt"];
         
-        __unused NSURLConnection *fetchConn = [[NSURLConnection alloc] initWithRequest:request delegate:logger startImmediately:YES];
+//        NSURLRequest *request = [NSURLRequest requestWithURL:url];
+        
+//        __unused NSURLConnection *fetchConn = [[NSURLConnection alloc] initWithRequest:request delegate:logger startImmediately:YES];
         
 //        __unused NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:2.0
 //                                                          target:logger

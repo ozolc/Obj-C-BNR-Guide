@@ -8,7 +8,16 @@
 
 #import "BNRLogger.h"
 
+@interface BNRLogger ()
+- (void)zoneChange:(NSNotificationCenter *)note;
+@end
+
 @implementation BNRLogger
+
+- (void)zoneChange:(NSNotificationCenter *)note
+{
+    NSLog(@"The system zone has changed!");
+}
 
 // Called each time a chunk of data arrives
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
