@@ -9,18 +9,42 @@
 #import "AppDelegate.h"
 #import "ViewController.h"
 
+// Helper function to fetch the path to our to-do data stored on disk
+NSString *DocPath()
+{
+    NSArray *pathList = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                            NSUserDomainMask,
+                                                            YES);
+    return [pathList[0] stringByAppendingPathComponent:@"data.td"];
+}
+
 @interface AppDelegate ()
 
 @end
 
 @implementation AppDelegate
 
+- (void)WriteToFile {
+    NSLog(@"Saving a dataset");
+    [self.tasks writeToFile:DocPath() atomically:YES];
+}
+
 #pragma mark - Application delegate callbacks
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Create an empty array to get us started
-    self.tasks = [NSMutableArray array];
+    
+    // Load an existing dataset or create a new one
+    NSArray *plist = [NSArray arrayWithContentsOfFile:DocPath()];
+    if (plist) {
+        // We have a dataset; copy it into tasks
+        NSLog(@"Loading dataset");
+        self.tasks = [plist mutableCopy];
+    } else {
+        // There is no dataset; create an empty array
+        NSLog(@"Create an empty dataset");
+        self.tasks = [NSMutableArray array];
+    }
     
     // Create and configure the UIWindow instance
     // CGRect is a struct with an origin (x, y) and a size (width, height)
@@ -71,7 +95,15 @@
     [self.window.rootViewController.view addSubview:self.taskField];
     [self.window.rootViewController.view addSubview:self.insertButton];
     
+    
+    
     return YES;
+}
+
+- (void)applicationDidEnterBackground:(UIApplication *)application
+{
+    // Save our task array to disk
+    [self WriteToFile];
 }
 
 #pragma mark - Actions
@@ -92,10 +124,14 @@
     // Refresh the table so that the new item shows up
     [self.taskTable reloadData];
     
+    // Save our task array to disk
+    [self WriteToFile];
+    
     // Clear out the text field
     [self.taskField setText:@""];
     // Dismiss the keyboard
     [self.taskField resignFirstResponder];
+    
 }
 
 #pragma mark - Table view management
